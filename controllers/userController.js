@@ -65,6 +65,31 @@ class UserController {
       next(err);
     }
   }
+  static async updateIsActive(req, res, next) {
+    const { id } = req.params
+    const { is_active } = req.body
+    try {
+      if (id === 1) throw {
+        name: 'BadRequest',
+        message: 'Tidak Bisa Menonaktifkan Super Admin!'
+      }
+      const updateUserStatus = await User.update({is_active},{
+        where: {
+          id
+        },
+        returning: true
+      })
+      if (updateUserStatus[0] === 0) throw {
+        name: 'BadRequest',
+        message: 'Akun Tidak Ditemukan!'
+      }
+      
+      res.status(201).json({message: `Status Akun Berhasil Diubah!`})
+    } catch (err) {
+      console.log(err);
+      next(err)
+    }
+  }
 }
 
 module.exports = UserController

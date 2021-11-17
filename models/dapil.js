@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Dapil.hasMany(models.Caleg, { foreignKey: 'dapilId', targetKey: 'id' });
     }
   };
   Dapil.init({

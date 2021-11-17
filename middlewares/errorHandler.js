@@ -1,5 +1,4 @@
 function errorHandler(err, req, res, next) {
-  console.log(err, "<<< ERROR DARI BUYER SERVICE");
   switch (err.name) {
     case 'SequelizeValidationError':
       res.status(400).json({ message: [err.errors[0].message] });
