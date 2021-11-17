@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   User.init({
     email: {
       validate: {
-        isEmail: { msg: 'Please input a valid Email format!' }
+        isEmail: { message: 'Please input a valid Email format!' }
       },
       type: DataTypes.STRING
     },
@@ -26,12 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     is_active: DataTypes.BOOLEAN
   }, {
     sequelize,
-    modelName: 'User',
-    hooks: {
-      beforeCreate: (user, options) => {
-        user.password = hashPassword(user.password)
-      }
-    }
+    modelName: 'User'
   });
   return User;
 };

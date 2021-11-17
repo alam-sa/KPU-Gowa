@@ -18,7 +18,7 @@ module.exports = (sequelize, DataTypes) => {
   ParpolUser.init({
     email: {
       validate: {
-        isEmail: { msg: 'Please input a valid Email format!' }
+        isEmail: { message: 'Please input a valid Email format!' }
       },
       type: DataTypes.STRING
     },
