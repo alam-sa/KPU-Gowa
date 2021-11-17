@@ -17,8 +17,8 @@ module.exports = {
       logo: {
         type: Sequelize.STRING
       },
-      deskripsi: {
-        type: Sequelize.STRING
+      visi_misi: {
+        type: Sequelize.TEXT
       },
       createdAt: {
         allowNull: false,

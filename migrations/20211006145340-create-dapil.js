@@ -11,6 +11,9 @@ module.exports = {
       nama_dapil: {
         type: Sequelize.STRING
       },
+      kecamatan: {
+        type: Sequelize.TEXT
+      },
       createdAt: {
         allowNull: false,
         type: Sequelize.DATE

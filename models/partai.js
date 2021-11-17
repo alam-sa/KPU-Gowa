@@ -11,13 +11,15 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      Partai.hasMany(models.Caleg, { foreignKey: 'partaiId', targetKey: 'id' });
+      Partai.hasMany(models.ParpolUser, { foreignKey: 'partaiId', targetKey: 'id' });
     }
   };
   Partai.init({
     nama_partai: DataTypes.STRING,
     nomor_urut: DataTypes.INTEGER,
     logo: DataTypes.STRING,
-    deskripsi: DataTypes.STRING
+    visi_misi: DataTypes.TEXT
   }, {
     sequelize,
     modelName: 'Partai',

@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Caleg extends Model {
+  class ParpolUser extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -11,20 +11,11 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      Caleg.belongsTo(models.Partai, { foreignKey: 'partaiId', targetKey: 'id' });
+      ParpolUser.belongsTo(models.Partai, { foreignKey: 'partaiId', targetKey: 'id' });
+      ParpolUser.belongsTo(models.UserLevel, { foreignKey: 'userLevelId', targetKey: 'id' });
     }
   };
-  Caleg.init({
-    nama: DataTypes.STRING,
-    NIK: DataTypes.STRING,
-    noHp: DataTypes.STRING,
-    tempat_lahir: DataTypes.STRING,
-    tanggal_lahir: DataTypes.DATE,
-    agama: DataTypes.STRING,
-    alamat: DataTypes.STRING,
-    provinsi: DataTypes.STRING,
-    kabupaten: DataTypes.STRING,
-    no_urut: DataTypes.INTEGER,
+  ParpolUser.init({
     email: {
       validate: {
         isEmail: { msg: 'Please input a valid Email format!' }
@@ -32,10 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.STRING
     },
     password: DataTypes.STRING,
-    status: DataTypes.INTEGER
+    is_active: DataTypes.BOOLEAN
   }, {
     sequelize,
-    modelName: 'Caleg',
+    modelName: 'ParpolUser',
   });
-  return Caleg;
+  return ParpolUser;
 };

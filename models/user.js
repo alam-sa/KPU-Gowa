@@ -12,10 +12,16 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      User.belongsTo(models.UserLevel, { foreignKey: 'userLevelId', targetKey: 'id' });
     }
   };
   User.init({
-    email: DataTypes.STRING,
+    email: {
+      validate: {
+        isEmail: { msg: 'Please input a valid Email format!' }
+      },
+      type: DataTypes.STRING
+    },
     password: DataTypes.STRING,
     is_active: DataTypes.BOOLEAN
   }, {

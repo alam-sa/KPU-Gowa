@@ -35,13 +35,17 @@ module.exports = {
       kabupaten: {
         type: Sequelize.STRING
       },
-      kecamatan: {
-        type: Sequelize.STRING
-      },
-      kelurahan: {
-        type: Sequelize.STRING
-      },
       no_urut: {
+        type: Sequelize.INTEGER
+      },
+      email: {
+        unique: true,
+        type: Sequelize.STRING
+      },
+      password: {
+        type: Sequelize.STRING
+      },
+      status: {
         type: Sequelize.INTEGER
       },
       createdAt: {

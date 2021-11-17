@@ -11,6 +11,8 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      UserLevel.hasMany(models.ParpolUser, { foreignKey: 'userLevelId', targetKey: 'id' });
+      UserLevel.hasMany(models.User, { foreignKey: 'userLevelId', targetKey: 'id' });
     }
   };
   UserLevel.init({
