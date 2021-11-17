@@ -1,6 +1,7 @@
 const { Op } = require("sequelize");
 const { hashPassword } = require("../helpers/bcrypt");
 const { Caleg } = require("../models");
+const { phoneValidator } = require("../helpers/inputValidator");
 
 class CalegController {
   static async register(req, res, next) {
@@ -37,7 +38,7 @@ class CalegController {
       const newUser = await Caleg.create({
         nama,
         NIK,
-        noHp,
+        noHp: phoneValidator(noHp),
         tempat_lahir,
         tanggal_lahir,
         agama,
