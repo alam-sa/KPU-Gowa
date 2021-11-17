@@ -1,6 +1,6 @@
 const cors = require('cors');
 const express = require('express');
-// const router = require('./routes');
+const router = require('./routes');
 // const errorHandler = require('./middlewares/error-handler');
 
 const app = express();
@@ -16,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 //   </div>
 // `));
 
-// app.use(router);
+app.use(router);
 // app.use(errorHandler);
 
 app.listen(port, () => console.log(`service running at port ${port}`));
