@@ -90,6 +90,26 @@ class UserController {
       next(err)
     }
   }
+  static async deleteUser(req, res, next) {
+    const { id } = req.params
+    try {
+      
+      const delUser = await User.destroy({
+        where: {
+          id
+        }
+      })
+      if (!delUser) throw {
+        name: 'BadRequest',
+        message: 'Akun Tidak Ditemukan!'
+      }
+      
+      res.status(201).json({message: `Akun Berhasil Dihapus!`})
+    } catch (err) {
+      console.log(err);
+      next(err)
+    }
+  }
 }
 
 module.exports = UserController

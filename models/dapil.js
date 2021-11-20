@@ -16,7 +16,9 @@ module.exports = (sequelize, DataTypes) => {
   };
   Dapil.init({
     nama_dapil: DataTypes.STRING,
-    kecamatan: DataTypes.TEXT
+    wilayah_dapil: DataTypes.TEXT,
+    jumlah_kursi: DataTypes.INTEGER,
+    total_pemilih: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'Dapil',

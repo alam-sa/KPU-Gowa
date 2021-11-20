@@ -11,8 +11,14 @@ module.exports = {
       nama_dapil: {
         type: Sequelize.STRING
       },
-      kecamatan: {
+      wilayah_dapil: {
         type: Sequelize.TEXT
+      },
+      jumlah_kursi: {
+        type: Sequelize.INTEGER
+      },
+      total_pemilih: {
+        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

@@ -35,6 +35,9 @@ module.exports = {
       kabupaten: {
         type: Sequelize.STRING
       },
+      kecamatan: {
+        type: Sequelize.STRING
+      },
       no_urut: {
         type: Sequelize.INTEGER
       },
@@ -44,9 +47,6 @@ module.exports = {
       },
       password: {
         type: Sequelize.STRING
-      },
-      status: {
-        type: Sequelize.INTEGER
       },
       createdAt: {
         allowNull: false,

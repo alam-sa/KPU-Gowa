@@ -13,6 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       Caleg.belongsTo(models.Partai, { foreignKey: 'partaiId', targetKey: 'id' });
       Caleg.belongsTo(models.Dapil, { foreignKey: 'dapilId', targetKey: 'id' });
+      Caleg.belongsTo(models.StatusCaleg, { foreignKey: 'status', targetKey: 'id' });
+      Caleg.belongsTo(models.Dokumen, {foreignKey: 'dokumenId'});
     }
   };
   Caleg.init({
@@ -25,6 +27,7 @@ module.exports = (sequelize, DataTypes) => {
     alamat: DataTypes.STRING,
     provinsi: DataTypes.STRING,
     kabupaten: DataTypes.STRING,
+    kecamatan: DataTypes.STRING,
     no_urut: DataTypes.INTEGER,
     email: {
       validate: {
@@ -32,8 +35,8 @@ module.exports = (sequelize, DataTypes) => {
       },
       type: DataTypes.STRING
     },
-    password: DataTypes.STRING,
-    status: DataTypes.INTEGER
+    password: DataTypes.STRING
+    
   }, {
     sequelize,
     modelName: 'Caleg',
