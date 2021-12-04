@@ -1,4 +1,4 @@
-const { User } = require("../models");
+const { User, UserLevel } = require("../models");
 const { comparePassword, hashPassword } = require('../helpers/bcrypt');
 const { generateToken } = require('../helpers/jwt');
 
@@ -36,6 +36,19 @@ class UserController {
       next(err)
     }
   }
+  static async getAllAdmin(req, res, next) {
+    try {
+      const admins = await User.findAll({
+        include: [
+          {model: UserLevel}
+        ]
+      });
+      res.status(200).json(admins)
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
+  }
   static async addAdmin(req, res, next) {
     const { email, password } = req.body
     try {
@@ -68,14 +81,15 @@ class UserController {
   static async updateIsActive(req, res, next) {
     const { id } = req.params
     const { is_active } = req.body
+    console.log(id, is_active, ">>>>>>>>>>>>>>>>>");
     try {
-      if (id === 1) throw {
+      if (+id === 1) throw {
         name: 'BadRequest',
         message: 'Tidak Bisa Menonaktifkan Super Admin!'
       }
       const updateUserStatus = await User.update({is_active},{
         where: {
-          id
+          id: +id
         },
         returning: true
       })
@@ -93,6 +107,11 @@ class UserController {
   static async deleteUser(req, res, next) {
     const { id } = req.params
     try {
+
+      if (+id === 1) throw {
+        name: 'BadRequest',
+        message: 'Tidak Bisa Menghapus Super Admin!'
+      }
       
       const delUser = await User.destroy({
         where: {

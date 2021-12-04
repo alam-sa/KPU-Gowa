@@ -3,7 +3,8 @@ const { Partai } = require("../models");
 class PartaiController {
   static async getAllPartai(req, res, next) {
     try {
-      
+      const partais = await Partai.findAll();
+      res.status(200).json(partais)
     } catch (err) {
       console.log(err);
       next(err);

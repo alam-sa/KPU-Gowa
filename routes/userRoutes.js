@@ -6,6 +6,7 @@ const auth = require('../middlewares/auth');
 
 router.post('/login', UserController.login);
 router.use(auth);
+router.get('/', authorizedAdmin, UserController.getAllAdmin);
 router.post('/addAdmin', authorizedAdmin, UserController.addAdmin);
 router.patch('/status/:id', authorizedAdmin, UserController.updateIsActive);
 router.delete('/:id', authorizedSuperAdmin, UserController.deleteUser);

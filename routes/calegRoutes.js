@@ -7,6 +7,7 @@ const authorizedAdmin = require('../middlewares/autorizedAdmin');
 router.post('/register', CalegController.register);
 router.post('/login', CalegController.login);
 router.use(auth);
+router.get('/:status', CalegController.getAllByStatus)
 router.get('/:id', CalegController.getCalegData);
 router.post('/image/upload', uploadProfil.single('image'), CalegController.uploadImage);
 router.patch('/profil', CalegController.updateProfil);

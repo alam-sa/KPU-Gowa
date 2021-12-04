@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Caleg, Partai, Dapil } = require("../models");
+const { Caleg, Partai, Dapil, StatusCaleg } = require("../models");
 const { comparePassword, hashPassword } = require('../helpers/bcrypt');
 const { generateToken } = require('../helpers/jwt');
 const { phoneValidator } = require("../helpers/inputValidator");
@@ -76,6 +76,33 @@ class CalegController {
       next(err)
     }
   }
+  static async getAllByStatus(req, res, next) {
+    const { status } = req.params
+    try {
+      const foundCaleg = await Caleg.findAll({
+        where: {
+          status
+        },
+        include: [
+          {
+            model: Partai, 
+            attributes: {exclude: ['createdAt', 'updatedAt']}
+          },
+          {
+            model: Dapil, 
+            attributes: {exclude: ['createdAt', 'updatedAt']}
+          },
+          {
+            model: StatusCaleg, 
+            attributes: {exclude: ['createdAt', 'updatedAt']}
+          }]
+      });
+      res.status(200).json(foundCaleg)
+    } catch (err) {
+      console.log(err);
+      next(err)
+    }
+  }
   static async getCalegData(req, res, next) {
     const { id } = req.params
     try {
@@ -91,6 +118,7 @@ class CalegController {
           }],
         attributes: {exclude: ['createdAt']},
       });
+      console.log(foundCaleg, ">>>>>>>>>>>>>>>>>..");
       res.status(200).json(foundCaleg)
     } catch (err) {
       console.log(err);
