@@ -1,5 +1,5 @@
 const { Op } = require("sequelize");
-const { Caleg, Partai, Dapil, StatusCaleg } = require("../models");
+const { Caleg, Partai, Dapil, StatusCaleg, Dokumen } = require("../models");
 const { comparePassword, hashPassword } = require('../helpers/bcrypt');
 const { generateToken } = require('../helpers/jwt');
 const { phoneValidator } = require("../helpers/inputValidator");
@@ -28,6 +28,8 @@ class CalegController {
         name: 'BadRequest',
         message: 'NIK / Email telah terdaftar!'
       }
+      const docs = await Dokumen.create({});
+
       const newUser = await Caleg.create({
         nama,
         NIK,
@@ -35,6 +37,7 @@ class CalegController {
         password: hashPassword(password),
         dapilId,
         partaiId,
+        dokumenId: docs.id,
         status: 1
       })
       res.status(201).json(newUser)
@@ -66,7 +69,8 @@ class CalegController {
       
       const access_token = generateToken({
         email: foundUser.email,
-        status: foundUser.status
+        status: foundUser.status,
+        _id: foundUser.id
       });
 
       res.status(200).json({ access_token })
@@ -76,13 +80,10 @@ class CalegController {
       next(err)
     }
   }
-  static async getAllByStatus(req, res, next) {
+  static async getAll(req, res, next) {
     const { status } = req.params
     try {
       const foundCaleg = await Caleg.findAll({
-        where: {
-          status
-        },
         include: [
           {
             model: Partai, 
@@ -96,6 +97,35 @@ class CalegController {
             model: StatusCaleg, 
             attributes: {exclude: ['createdAt', 'updatedAt']}
           }]
+      });
+      res.status(200).json(foundCaleg)
+    } catch (err) {
+      console.log(err);
+      next(err)
+    }
+  }
+  static async getCalegLogin(req, res, next) {
+    const id = req.decoded._id
+    try {
+      const foundCaleg = await Caleg.findByPk(+id, { 
+        include: [
+          {
+            model: Partai, 
+            attributes: {exclude: ['createdAt', 'updatedAt']}
+          },
+          {
+            model: Dapil, 
+            attributes: {exclude: ['createdAt', 'updatedAt']}
+          },
+          {
+            model: Dokumen, 
+            attributes: {exclude: ['createdAt', 'updatedAt']}
+          },
+          {
+            model: StatusCaleg, 
+            attributes: {exclude: ['createdAt', 'updatedAt']}
+          },],
+        attributes: {exclude: ['password']},
       });
       res.status(200).json(foundCaleg)
     } catch (err) {
@@ -118,7 +148,6 @@ class CalegController {
           }],
         attributes: {exclude: ['createdAt']},
       });
-      console.log(foundCaleg, ">>>>>>>>>>>>>>>>>..");
       res.status(200).json(foundCaleg)
     } catch (err) {
       console.log(err);
@@ -126,11 +155,20 @@ class CalegController {
     }
   }
   static async uploadImage(req, res, next) {
+    let { email } = req.decoded
     try {
       let finalImageURL =
     req.protocol + "://" + req.get("host") + "/profil/" + req.file.filename.replace(/\s+/g, '');
-
-    res.json({ image: finalImageURL });
+    const updateImage = await Caleg.update({foto_profil: finalImageURL}, {
+      where: {
+        email
+      }
+    });
+    if (updateImage[0] === 0) throw {
+      name: 'DatabaseFailure',
+      message: 'gagal upload profil!'
+    }
+    res.status(201).json({ message: "sukses upload foto" });
     } catch (err) {
       console.log(err);
       next(err);
@@ -142,7 +180,7 @@ class CalegController {
     try {
 
       const updateProfilCaleg = await Caleg.update({
-        nama, NIK, noHp, tempat_lahir, tanggal_lahir,  agama,  alamat, provinsi, kabupaten, kecamatan
+        nama, NIK, noHp: phoneValidator(noHp), tempat_lahir, tanggal_lahir,  agama,  alamat, provinsi, kabupaten, kecamatan
       }, {
         where: {
           email

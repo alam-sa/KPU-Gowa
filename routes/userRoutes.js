@@ -5,10 +5,9 @@ const authorizedSuperAdmin = require('../middlewares/autorizedSuperAdmin');
 const auth = require('../middlewares/auth');
 
 router.post('/login', UserController.login);
-router.use(auth);
-router.get('/', authorizedAdmin, UserController.getAllAdmin);
-router.post('/addAdmin', authorizedAdmin, UserController.addAdmin);
-router.patch('/status/:id', authorizedAdmin, UserController.updateIsActive);
-router.delete('/:id', authorizedSuperAdmin, UserController.deleteUser);
+router.get('/', auth, authorizedAdmin, UserController.getAllAdmin);
+router.post('/addAdmin', auth, authorizedAdmin, UserController.addAdmin);
+router.patch('/status/:id', auth, authorizedAdmin, UserController.updateIsActive);
+router.delete('/:id', auth, authorizedSuperAdmin, UserController.deleteUser);
 
 module.exports = router;

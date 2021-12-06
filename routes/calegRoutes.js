@@ -6,12 +6,12 @@ const authorizedAdmin = require('../middlewares/autorizedAdmin');
 
 router.post('/register', CalegController.register);
 router.post('/login', CalegController.login);
-router.use(auth);
-router.get('/:status', CalegController.getAllByStatus)
-router.get('/:id', CalegController.getCalegData);
-router.post('/image/upload', uploadProfil.single('image'), CalegController.uploadImage);
-router.patch('/profil', CalegController.updateProfil);
-router.patch('/status/:id', authorizedAdmin, CalegController.updateStatus);
-router.delete('/:id', authorizedAdmin, CalegController.deleteUser)
+router.get('/', auth, CalegController.getAll);
+router.get('/user', auth, CalegController.getCalegLogin);
+router.get('/:id', auth, CalegController.getCalegData);
+router.post('/image/upload', auth, uploadProfil.single('image'), CalegController.uploadImage);
+router.patch('/profil', auth, CalegController.updateProfil);
+router.patch('/status/:id', auth, authorizedAdmin, CalegController.updateStatus);
+router.delete('/:id', auth, authorizedAdmin, CalegController.deleteUser)
 
 module.exports = router;

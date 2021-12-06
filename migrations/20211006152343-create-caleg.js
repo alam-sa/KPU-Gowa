@@ -17,6 +17,9 @@ module.exports = {
       noHp: {
         type: Sequelize.STRING
       },
+      foto_profil: {
+        type: Sequelize.STRING
+      },
       tempat_lahir: {
         type: Sequelize.STRING
       },

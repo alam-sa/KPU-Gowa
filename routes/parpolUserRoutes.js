@@ -5,9 +5,8 @@ const authorizedAdmin = require('../middlewares/autorizedAdmin');
 const authorizedSuperAdmin = require('../middlewares/autorizedSuperAdmin');
 
 router.post('/login', ParpolUserController.login);
-router.use(auth)
-router.get('/superAdmin', authorizedAdmin, ParpolUserController.getSuperAdmin);
-router.post('/superAdmin/:partaiId', authorizedAdmin, ParpolUserController.addSuperadminParpol)
-router.delete('/:id', authorizedSuperAdmin, ParpolUserController.deleteUser)
+router.get('/superAdmin', auth, authorizedAdmin, ParpolUserController.getSuperAdmin);
+router.post('/superAdmin/:partaiId', auth, authorizedAdmin, ParpolUserController.addSuperadminParpol)
+router.delete('/:id', auth, authorizedSuperAdmin, ParpolUserController.deleteUser)
 
 module.exports = router;

@@ -10,7 +10,6 @@ const auth = require('../middlewares/auth');
 router.use('/caleg', calegRoute);
 router.use('/parpolUser', parpolUserRoute);
 router.use('/user', userRoute);
-router.use(auth)
 router.use('/dapil', dapilRoute);
 router.use('/partai', partaiRoute);
 router.use('/dokumen', dokumenRoute)
