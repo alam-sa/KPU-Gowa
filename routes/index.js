@@ -7,6 +7,11 @@ const userRoute = require('./userRoutes');
 const dokumenRoute = require('./dokumenRoutes');
 const auth = require('../middlewares/auth');
 
+const ZipcodeController = require('../controllers/zipcodeController')
+
+router.get('/region', ZipcodeController.getRegion);
+router.get('/provinces', ZipcodeController.getProvince);
+
 router.use('/caleg', calegRoute);
 router.use('/parpolUser', parpolUserRoute);
 router.use('/user', userRoute);

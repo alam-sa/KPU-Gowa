@@ -1,6 +1,16 @@
 const { Dokumen, Caleg } = require("../models");
 
 class DokumenController {
+  static async getDokumenById(req, res, next) {
+    const { id } = req.params
+    try {
+      const dokumen = await Dokumen.findByPk(+id);
+      res.status(200).json(dokumen);
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
+  }
   static async uploadDokumen(req, res, next) {
     try {
       let finalDokumenURL =
@@ -13,7 +23,27 @@ class DokumenController {
     }
   }
   static async uploadDokumenCaleg(req, res, next) {
-    const { ktp, bb1, bb2, ijazah, suket_sehat, suket_kpu, skck, kta_parpol, dokumen_lainnya } = req.body
+    const { id } = req.params
+    const { 
+      ktp,
+      bb1,
+      bb2,
+      ijazah,
+      suket_sehat,
+      suket_kpu,
+      skck,
+      kta_parpol,
+      dokumen_lainnya,
+      // ktp_verified,
+      // bb1_verified,
+      // bb2_verified,
+      // ijazah_verified,
+      // suket_sehat_verified,
+      // suket_kpu_verified,
+      // skck_verified,
+      // kta_parpol_verified,
+      // dokumen_lainnya_verified 
+    } = req.body
     const { email } = req.decoded
     try {
       const caleg = await Caleg.findOne({
@@ -21,20 +51,35 @@ class DokumenController {
           email
         }
       });
-      console.log(caleg);
       if (!caleg) throw {
         name: 'NotFound',
         message: 'Data Caleg Tidak Ditemukan!'
       }
-      const uploadDokumen = await Dokumen.create({
-        ktp, bb1, bb2, ijazah, suket_sehat, suket_kpu, skck, kta_parpol, dokumen_lainnya
-      });
-      
-      await Caleg.update({dokumenId: uploadDokumen.id}, {
+      const uploadDokumen = await Dokumen.update({
+        ktp,
+        bb1,
+        bb2,
+        ijazah,
+        suket_sehat,
+        suket_kpu,
+        skck,
+        kta_parpol,
+        dokumen_lainnya,
+        ktp_verified: null,
+        bb1_verified: null,
+        bb2_verified: null,
+        ijazah_verified: null,
+        suket_sehat_verified: null,
+        suket_kpu_verified: null,
+        skck_verified: null,
+        kta_parpol_verified: null,
+        dokumen_lainnya_verified: null
+      }, {
         where: {
-          email
+          id
         }
       });
+      
       res.status(201).json({ message: "Upload Dokumen Berhasil" })
     } catch (err) {
       console.log(err);

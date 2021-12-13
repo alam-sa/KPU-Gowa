@@ -92,12 +92,37 @@ class CalegController {
           {
             model: Dapil, 
             attributes: {exclude: ['createdAt', 'updatedAt']}
-          },
-          {
-            model: StatusCaleg, 
-            attributes: {exclude: ['createdAt', 'updatedAt']}
-          }]
-      });
+          }],
+        attributes: {exclude: ['createdAt']},
+      })
+      res.status(200).json(foundCaleg)
+    } catch (err) {
+      console.log(err);
+      next(err)
+    }
+  }
+  static async getAllByStatus(req, res, next) {
+    const { status } = req.params
+    try {
+      const foundCaleg = await Caleg.findAll({
+        where: {
+          status: +status
+        },
+          include: [
+            {
+              model: Partai, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: StatusCaleg, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: Dapil, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            }],
+          attributes: {exclude: ['password']}
+      })
       res.status(200).json(foundCaleg)
     } catch (err) {
       console.log(err);
@@ -176,31 +201,29 @@ class CalegController {
   }
   static async updateProfil(req, res, next) {
     const { email } = req.decoded
-    const { nama, NIK, noHp, tempat_lahir, tanggal_lahir,  agama,  alamat, provinsi, kabupaten, kecamatan } = req.body
+    const { nama, NIK, noHp, tempat_lahir, tanggal_lahir,  agama,  alamat, provinsi, kabupaten, kecamatan, partaiId, dapilId } = req.body
     try {
 
       const updateProfilCaleg = await Caleg.update({
-        nama, NIK, noHp: phoneValidator(noHp), tempat_lahir, tanggal_lahir,  agama,  alamat, provinsi, kabupaten, kecamatan
+        nama, NIK, noHp: phoneValidator(noHp), tempat_lahir, tanggal_lahir,  agama,  alamat, provinsi, kabupaten, kecamatan, dapilId, partaiId
       }, {
         where: {
           email
         },
         returning: true
       });
-      res.status(201).json(updateProfilCaleg)
+      res.status(201).json({message: "Update Profil Sukses!"})
     } catch (err) {
       console.log(err);
       next(err);
     }
   }
   static async updateStatus(req, res, next) {
+    console.log(">>>>>>>>>>>>>>>>>>>>>>>");
     const { id } = req.params
     const { status } = req.body
+    console.log(req.body, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     try {
-      if (!req.decoded.userLevelId) throw {
-        name: "Forbidden",
-        message: "Tidak dapat diakses!"
-      }
       const updateStatusCaleg = await Caleg.update({
         status: +status
       }, {
