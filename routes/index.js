@@ -17,6 +17,6 @@ router.use('/parpolUser', parpolUserRoute);
 router.use('/user', userRoute);
 router.use('/dapil', dapilRoute);
 router.use('/partai', partaiRoute);
-router.use('/dokumen', dokumenRoute)
+router.use('/berkas', dokumenRoute)
 
 module.exports = router;

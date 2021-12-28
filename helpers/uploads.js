@@ -40,7 +40,7 @@ const uploadLogo = multer({ storage: logoStorage });
 // upload dokumen
 const dokumenStorage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "./public/dokumen");
+    cb(null, "./public/berkas");
   },
   filename: function (req, file, cb) {
     cb(

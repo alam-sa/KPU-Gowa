@@ -13,6 +13,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, "public")));
 
+app.get('/pdf/:file', function(req, res) {
+  res.sendFile(__dirname + `/public/berkas/${req.params.file}`);
+})
 app.use('/api', router);
 app.use(errorHandler);
 

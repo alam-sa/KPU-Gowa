@@ -101,12 +101,11 @@ class CalegController {
       next(err)
     }
   }
-  static async getAllByStatus(req, res, next) {
-    const { status } = req.params
+  static async getAllVerified(req, res, next) {
     try {
       const foundCaleg = await Caleg.findAll({
         where: {
-          status: +status
+          status: 4
         },
           include: [
             {
@@ -115,6 +114,74 @@ class CalegController {
             },
             {
               model: StatusCaleg, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: Dokumen, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: Dapil, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            }],
+          attributes: {exclude: ['password']}
+      })
+      res.status(200).json(foundCaleg)
+    } catch (err) {
+      console.log(err);
+      next(err)
+    }
+  }
+  static async getAllRegister(req, res, next) {
+    try {
+      const foundCaleg = await Caleg.findAll({
+        where: {
+          status: {
+            [Op.ne]: 4
+          }
+        },
+          include: [
+            {
+              model: Partai, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: StatusCaleg, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: Dokumen, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: Dapil, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            }],
+          attributes: {exclude: ['password']}
+      })
+      res.status(200).json(foundCaleg)
+    } catch (err) {
+      console.log(err);
+      next(err)
+    }
+  }
+  static async getAllValidate(req, res, next) {
+    try {
+      const foundCaleg = await Caleg.findAll({
+        where: {
+          status: 3
+        },
+          include: [
+            {
+              model: Partai, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: StatusCaleg, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: Dokumen, 
               attributes: {exclude: ['createdAt', 'updatedAt']}
             },
             {
@@ -168,6 +235,10 @@ class CalegController {
             attributes: {exclude: ['createdAt', 'updatedAt']}
           },
           {
+            model: Dokumen, 
+            attributes: {exclude: ['createdAt', 'updatedAt']}
+          },
+          {
             model: Dapil, 
             attributes: {exclude: ['createdAt', 'updatedAt']}
           }],
@@ -203,9 +274,19 @@ class CalegController {
     const { email } = req.decoded
     const { nama, NIK, noHp, tempat_lahir, tanggal_lahir,  agama,  alamat, provinsi, kabupaten, kecamatan, partaiId, dapilId } = req.body
     try {
-
       const updateProfilCaleg = await Caleg.update({
-        nama, NIK, noHp: phoneValidator(noHp), tempat_lahir, tanggal_lahir,  agama,  alamat, provinsi, kabupaten, kecamatan, dapilId, partaiId
+        nama,
+        NIK,
+        noHp: phoneValidator(noHp),
+        tempat_lahir,
+        tanggal_lahir,
+         agama,
+         alamat,
+        provinsi,
+        kabupaten,
+        kecamatan,
+        dapilId,
+        partaiId
       }, {
         where: {
           email
@@ -219,10 +300,8 @@ class CalegController {
     }
   }
   static async updateStatus(req, res, next) {
-    console.log(">>>>>>>>>>>>>>>>>>>>>>>");
     const { id } = req.params
     const { status } = req.body
-    console.log(req.body, ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>");
     try {
       const updateStatusCaleg = await Caleg.update({
         status: +status

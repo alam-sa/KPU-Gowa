@@ -11,10 +11,19 @@ class DokumenController {
       next(err);
     }
   }
+  static async displayPDF(req, res, next) {
+    const { name } = req.params
+    try {
+      res.sendFile(__dirname + `/public/berkas/${name}`);
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
+  }
   static async uploadDokumen(req, res, next) {
     try {
-      let finalDokumenURL =
-    req.protocol + "://" + req.get("host") + "/dokumen/" + req.file.filename.replace(/\s+/g, '');
+      let finalDokumenURL = req.file.filename.replace(/\s+/g, '')
+    // req.protocol + "://" + req.get("host") + "/berkas/" + req.file.filename.replace(/\s+/g, '');
 
     res.json({ dokumen: finalDokumenURL });
     } catch (err) {
