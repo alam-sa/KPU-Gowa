@@ -24,7 +24,7 @@ class DokumenController {
     try {
       let finalDokumenURL = req.file.filename.replace(/\s+/g, '')
     // req.protocol + "://" + req.get("host") + "/berkas/" + req.file.filename.replace(/\s+/g, '');
-
+      
     res.json({ dokumen: finalDokumenURL });
     } catch (err) {
       console.log(err);
@@ -64,6 +64,9 @@ class DokumenController {
         name: 'NotFound',
         message: 'Data Caleg Tidak Ditemukan!'
       }
+      // const oldDocuments = await Dokumen.findOne({
+      //   where: 
+      // })
       const uploadDokumen = await Dokumen.update({
         ktp,
         bb1,

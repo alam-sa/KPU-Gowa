@@ -196,6 +196,111 @@ class CalegController {
       next(err)
     }
   }
+
+  // for parpol
+  static async getAllParpolVerified(req, res, next) {
+    const { partaiId } = req.params
+    try {
+      const foundCaleg = await Caleg.findAll({
+        where: {
+          status: 4,
+          partaiId: +partaiId
+        },
+          include: [
+            {
+              model: Partai, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: StatusCaleg, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: Dokumen, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: Dapil, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            }],
+          attributes: {exclude: ['password']}
+      })
+      res.status(200).json(foundCaleg)
+    } catch (err) {
+      console.log(err);
+      next(err)
+    }
+  }
+  static async getAllParpolRegister(req, res, next) {
+    const { partaiId } = req.params
+    try {
+      const foundCaleg = await Caleg.findAll({
+        where: {
+          status: {
+            [Op.ne]: 4
+          },
+          partaiId: +partaiId
+        },
+          include: [
+            {
+              model: Partai, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: StatusCaleg, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: Dokumen, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: Dapil, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            }],
+          attributes: {exclude: ['password']}
+      })
+      res.status(200).json(foundCaleg)
+    } catch (err) {
+      console.log(err);
+      next(err)
+    }
+  }
+  static async getAllParpolValidate(req, res, next) {
+    const { partaiId } = req.params
+    try {
+      const foundCaleg = await Caleg.findAll({
+        where: {
+          status: 2,
+          partaiId: +partaiId
+        },
+          include: [
+            {
+              model: Partai, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: StatusCaleg, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: Dokumen, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            },
+            {
+              model: Dapil, 
+              attributes: {exclude: ['createdAt', 'updatedAt']}
+            }],
+          attributes: {exclude: ['password']}
+      })
+      res.status(200).json(foundCaleg)
+    } catch (err) {
+      console.log(err);
+      next(err)
+    }
+  }
+
+
   static async getCalegLogin(req, res, next) {
     const id = req.decoded._id
     try {
@@ -312,6 +417,40 @@ class CalegController {
         returning: true
       });
       res.status(201).json({ message: 'Update Status Berhasil!' })
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
+  }
+  static async updateNoUrut(req, res, next) {
+    const { id } = req.params
+    const { no_urut, partaiId } = req.body
+    console.log(req.body);
+    try {
+
+      const existingCaleg = await Caleg.findOne({
+        where: {
+          partaiId: +partaiId,
+          no_urut: +no_urut,
+          id: {
+            [Op.ne]: +id
+          }
+        }
+      })
+      console.log(existingCaleg, ">>>>>>>>>>");
+      if (existingCaleg) throw {
+        name: 'BadRequest',
+        message: 'Nomor urut telah digunakan!'
+      }
+      const updateNoUrutCaleg = await Caleg.update({
+        no_urut: +no_urut
+      }, {
+        where: {
+          id
+        },
+        returning: true
+      });
+      res.status(201).json({ message: 'Tambah No Urut Berhasil!' })
     } catch (err) {
       console.log(err);
       next(err);

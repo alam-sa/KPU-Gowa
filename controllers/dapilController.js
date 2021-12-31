@@ -24,6 +24,25 @@ class DapilController {
       next(err);
     }
   }
+  static async deleteDapil(req, res, next) {
+    const { id } = req.params
+    try {
+      const deletedDapil = await Dapil.destroy({
+        where: {
+          id: +id
+        }
+      });
+      if (!deletedDapil) throw {
+        name: 'BadRequest',
+        message: 'Data Tidak Ditemukan!'
+      }
+      
+      res.status(201).json({message: `Dapil Berhasil Dihapus!`})
+    } catch (err) {
+      console.log(err);
+      next(err);
+    }
+  }
 }
 
 module.exports = DapilController
